@@ -1,6 +1,6 @@
 """
-Yarrabilba Area — 95 Unleaded Price Tracker
-Fetches 95 unleaded prices from the QLD Government Fuel Price API
+Yarrabilba Area — Multi-Fuel Price Tracker
+Fetches 91, 95, 98 and Diesel prices from the QLD Government Fuel Price API
 and writes prices.json for the GitHub Pages dashboard.
 """
 
@@ -11,7 +11,15 @@ from datetime import datetime, timezone, timedelta
 
 FUEL_API_TOKEN = os.environ.get("FUEL_API_TOKEN", "")
 API_BASE       = "https://fppdirectapi-prod.fuelpricesqld.com.au"
-FUEL_ID        = 5  # 95 Unleaded
+
+FUEL_TYPES = {
+    2: "91",
+    5: "95",
+    8: "98",
+    3: "diesel",
+}
+
+PRICE_CEILING = 300
 
 MONITORED_STATIONS = [
     {"name": "7-Eleven Logan Village",  "site_id": 61478050, "region_id": 1},
@@ -26,8 +34,6 @@ MONITORED_STATIONS = [
     {"name": "BP Waterford",            "site_id": 61401714, "region_id": 1},
 ]
 
-PRICE_CEILING = 300  # ignore anything above this
-
 
 def get_prices(region_id=1):
     headers = {
@@ -40,28 +46,26 @@ def get_prices(region_id=1):
     return resp.json().get("SitePrices", [])
 
 
-def find_price(prices, site_id):
+def find_fuel_prices(prices, site_id):
+    result = {label: None for label in FUEL_TYPES.values()}
     for entry in prices:
-        if entry.get("SiteId") == site_id and entry.get("FuelId") == FUEL_ID:
+        if entry.get("SiteId") == site_id and entry.get("FuelId") in FUEL_TYPES:
             price = round(entry["Price"] / 10.0, 1)
             if price <= PRICE_CEILING:
-                return price
-    return None
+                label = FUEL_TYPES[entry["FuelId"]]
+                result[label] = price
+    return result
 
 
 def build_results():
     region_ids = set(s["region_id"] for s in MONITORED_STATIONS)
     all_prices = {rid: get_prices(rid) for rid in region_ids}
-# DEBUG — show all fuel IDs for missing stations
-    missing_ids = [61401679, 61478007, 61402264, 61402467, 61401773]
-    for entry in all_prices[1]:
-        if entry.get("SiteId") in missing_ids:
-            print(f"  SiteId={entry['SiteId']}  FuelId={entry['FuelId']}  Price={entry['Price']/10:.1f}c/L")
     results = []
     for station in MONITORED_STATIONS:
-        price = find_price(all_prices[station["region_id"]], station["site_id"])
-        results.append({"name": station["name"], "price": price})
-        print(f"  {station['name']}: {f'{price:.1f}c/L' if price else 'not found'}")
+        fuels = find_fuel_prices(all_prices[station["region_id"]], station["site_id"])
+        results.append({"name": station["name"], "fuels": fuels})
+        fuel_str = "  ".join([f"{k}={v:.1f}c/L" if v else f"{k}=—" for k, v in fuels.items()])
+        print(f"  {station['name']}: {fuel_str}")
     return results
 
 
@@ -69,12 +73,10 @@ def write_prices_json(results, fetch_time):
     payload = {
         "last_updated":     fetch_time.strftime("%Y-%m-%dT%H:%M:%S"),
         "last_updated_str": fetch_time.strftime("%A, %d %B %Y at %I:%M %p"),
-        "is_mock":          False,
         "stations":         [
             {
-                "name":      r["name"],
-                "price":     r["price"],
-                "price_str": f"{r['price']:.1f}c/L" if r["price"] else "Not reported",
+                "name":  r["name"],
+                "fuels": r["fuels"],
             }
             for r in results
         ],
@@ -87,7 +89,7 @@ def write_prices_json(results, fetch_time):
 def main():
     aest = timezone(timedelta(hours=10))
     fetch_time = datetime.now(tz=aest)
-    print(f"📡 Fetching 95 unleaded prices — {fetch_time.strftime('%d %b %Y %H:%M')}")
+    print(f"📡 Fetching fuel prices — {fetch_time.strftime('%d %b %Y %H:%M')}")
     results = build_results()
     write_prices_json(results, fetch_time)
 
