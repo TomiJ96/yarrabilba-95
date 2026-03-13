@@ -13,13 +13,16 @@ FUEL_API_TOKEN = os.environ.get("FUEL_API_TOKEN", "")
 API_BASE       = "https://fppdirectapi-prod.fuelpricesqld.com.au"
 
 FUEL_TYPES = {
-    2: "91",
-    5: "95",
-    8: "98",
-    3: "diesel",
+    2:    "91",
+    5:    "95",
+    8:    "98",
+    3:    "diesel",
+    6:    "diesel",
+    14:   "diesel",
+    1000: "diesel",
 }
 
-PRICE_CEILING = 300
+PRICE_CEILING = 500
 
 MONITORED_STATIONS = [
     {"name": "7-Eleven Logan Village",  "site_id": 61478050, "region_id": 1},
@@ -47,13 +50,14 @@ def get_prices(region_id=1):
 
 
 def find_fuel_prices(prices, site_id):
-    result = {label: None for label in FUEL_TYPES.values()}
+    result = {"91": None, "95": None, "98": None, "diesel": None}
     for entry in prices:
         if entry.get("SiteId") == site_id and entry.get("FuelId") in FUEL_TYPES:
             price = round(entry["Price"] / 10.0, 1)
             if price <= PRICE_CEILING:
                 label = FUEL_TYPES[entry["FuelId"]]
-                result[label] = price
+                if result[label] is None or price < result[label]:
+                    result[label] = price
     return result
 
 
