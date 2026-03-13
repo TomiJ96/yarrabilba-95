@@ -1,57 +1,96 @@
 {
-  "last_updated": "2026-03-13T22:51:10",
-  "last_updated_str": "Friday, 13 March 2026 at 10:51 PM",
-  "is_mock": false,
+  "last_updated": "2026-03-13T23:13:32",
+  "last_updated_str": "Friday, 13 March 2026 at 11:13 PM",
   "stations": [
     {
       "name": "7-Eleven Logan Village",
-      "price": 234.9,
-      "price_str": "234.9c/L"
+      "fuels": {
+        "91": 219.9,
+        "95": 234.9,
+        "98": 243.9,
+        "diesel": null
+      }
     },
     {
       "name": "BP Logan Village",
-      "price": null,
-      "price_str": "Not reported"
+      "fuels": {
+        "91": 239.9,
+        "95": null,
+        "98": 268.9,
+        "diesel": 277.9
+      }
     },
     {
       "name": "Shell Logan Village",
-      "price": 237.5,
-      "price_str": "237.5c/L"
+      "fuels": {
+        "91": 219.9,
+        "95": 237.5,
+        "98": 246.5,
+        "diesel": 260.9
+      }
     },
     {
       "name": "Ampol Yarrabilba",
-      "price": 235.9,
-      "price_str": "235.9c/L"
+      "fuels": {
+        "91": 219.9,
+        "95": 235.9,
+        "98": 244.9,
+        "diesel": null
+      }
     },
     {
       "name": "Ampol Yarrabilba South",
-      "price": 235.9,
-      "price_str": "235.9c/L"
+      "fuels": {
+        "91": 219.9,
+        "95": 235.9,
+        "98": 244.9,
+        "diesel": null
+      }
     },
     {
       "name": "Shell Tamborine",
-      "price": null,
-      "price_str": "Not reported"
+      "fuels": {
+        "91": 221.9,
+        "95": null,
+        "98": 247.9,
+        "diesel": null
+      }
     },
     {
       "name": "Ampol Tamborine",
-      "price": null,
-      "price_str": "Not reported"
+      "fuels": {
+        "91": 221.9,
+        "95": null,
+        "98": null,
+        "diesel": 259.9
+      }
     },
     {
       "name": "United Loganlea",
-      "price": null,
-      "price_str": "Not reported"
+      "fuels": {
+        "91": 219.9,
+        "95": null,
+        "98": 242.9,
+        "diesel": 260.9
+      }
     },
     {
       "name": "7-Eleven Loganlea",
-      "price": 234.9,
-      "price_str": "234.9c/L"
+      "fuels": {
+        "91": 219.9,
+        "95": 234.9,
+        "98": 243.9,
+        "diesel": null
+      }
     },
     {
       "name": "BP Waterford",
-      "price": 240.9,
-      "price_str": "240.9c/L"
+      "fuels": {
+        "91": null,
+        "95": 240.9,
+        "98": 249.9,
+        "diesel": null
+      }
     }
   ]
 }
