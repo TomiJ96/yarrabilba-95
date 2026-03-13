@@ -52,11 +52,11 @@ def find_price(prices, site_id):
 def build_results():
     region_ids = set(s["region_id"] for s in MONITORED_STATIONS)
     all_prices = {rid: get_prices(rid) for rid in region_ids}
-    # DEBUG — show all fuel IDs for missing stations
+# DEBUG — show all fuel IDs for missing stations
     missing_ids = [61401679, 61478007, 61402264, 61402467, 61401773]
     for entry in all_prices[1]:
-    if entry.get("SiteId") in missing_ids:
-        print(f"  SiteId={entry['SiteId']}  FuelId={entry['FuelId']}  Price={entry['Price']/10:.1f}c/L")
+        if entry.get("SiteId") in missing_ids:
+            print(f"  SiteId={entry['SiteId']}  FuelId={entry['FuelId']}  Price={entry['Price']/10:.1f}c/L")
     results = []
     for station in MONITORED_STATIONS:
         price = find_price(all_prices[station["region_id"]], station["site_id"])
