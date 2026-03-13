@@ -112,33 +112,43 @@
   }
 
 
+  .fuel-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
   .fuel-btn {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
+    flex: 1;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
     color: var(--muted);
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 800;
     letter-spacing: 1px;
-    padding: 12px 24px;
+    padding: 14px 10px;
     cursor: pointer;
     transition: all 0.2s;
     text-transform: uppercase;
-    flex: 1;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
   }
 
-
   .fuel-btn:hover {
-    border-color: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.3);
     color: var(--text);
+    transform: translateY(-1px);
   }
 
   .fuel-btn.active {
-    background: var(--blue);
-    border-color: var(--blue);
     color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
   }
 
   .fuel-btn.active.u91    { background: #2979ff; border-color: #2979ff; }
@@ -147,7 +157,7 @@
   .fuel-btn.active.diesel { background: #f5a623; border-color: #f5a623; color: #000; }
 
   .summary {
-    display: grid; grid-template-columns: repeat(3, 1fr);
+    display: grid; grid-template-columns: repeat(2, 1fr);
     gap: 10px; margin-bottom: 20px;
   }
 
@@ -306,7 +316,6 @@
 
   @media (max-width: 500px) {
     .summary { grid-template-columns: 1fr 1fr; }
-    .stat-card.average { grid-column: span 2; }
     .bar-wrap { display: none; }
     .fuel-btn { padding: 7px 12px; font-size: 13px; }
   }
@@ -337,10 +346,10 @@
 
   <!-- Fuel type selector -->
   <div class="fuel-selector">
-    <button class="fuel-btn u91 active" data-fuel="91"    onclick="setFuel('91')">U91</button>
-    <button class="fuel-btn u95"        data-fuel="95"    onclick="setFuel('95')">U95</button>
-    <button class="fuel-btn u98"        data-fuel="98"    onclick="setFuel('98')">U98</button>
-    <button class="fuel-btn diesel"     data-fuel="diesel" onclick="setFuel('diesel')">Diesel</button>
+    <button class="fuel-btn u91 active" data-fuel="91"    onclick="setFuel('91')">⛽ U91</button>
+    <button class="fuel-btn u95"        data-fuel="95"    onclick="setFuel('95')">⛽ U95</button>
+    <button class="fuel-btn u98"        data-fuel="98"    onclick="setFuel('98')">⛽ U98</button>
+    <button class="fuel-btn diesel"     data-fuel="diesel" onclick="setFuel('diesel')">⛽ Diesel</button>
   </div>
 
   <div id="content">
@@ -495,11 +504,6 @@
         <div class="stat-value">${maxP != null ? maxP.toFixed(1) : '—'}<span class="stat-unit">c/L</span></div>
         <div class="stat-sub">${expensiveStation?.name ?? '—'}</div>
       </div>
-      <div class="stat-card average">
-        <div class="stat-label">Average across all</div>
-        <div class="stat-value">${avgP ? avgP.toFixed(1) : '—'}<span class="stat-unit">c/L</span></div>
-        <div class="stat-sub">${withPrice.length} of ${stations.length} reporting</div>
-      </div>`;
 
     let stationsHTML = '';
     if (currentSort === 'price') {
